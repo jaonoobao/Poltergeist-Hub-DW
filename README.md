@@ -1,5 +1,16 @@
 local Poltergeist = loadstring(game:HttpGet("https://raw.githubusercontent.com/berhddb/Library/refs/heads/main/Main", true))()
 
+local function sound(id)
+    local sound = Instance.new("Sound")
+    sound.SoundId = "rbxassetid://"..id
+    sound.Parent = workspace
+    sound.Volume = 1
+    sound:Play()
+    sound.Ended:Connect(function()
+        sound:Destroy()
+    end)
+end
+
 -- Create main window
 local Window = Poltergeist:CreateWindow({
     Name = "Poltergeist Hub",
@@ -30,7 +41,7 @@ local GeneralTab = Window:CreateTab({
     ShowTitle = true
 })
 
-GeneralTab:CreateSection("ESP Systems")
+GeneralTab:CreateSection("Visual")
 
 -- Generator ESP System
 local GeneratorESP = false
@@ -41,27 +52,27 @@ local GeneratorESPToggle = GeneralTab:CreateToggle({
     Callback = function(v)
         GeneratorESP = v
         if GeneratorESP then
-		-- Notification
-		Poltergeist:Notification({ 
-		Title = "Notification",
-		Icon = "notifications_active",
-		ImageSource = "Material",
-		Content = "Generator ESP has been activated"
-		})
+            sound(8486683243)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Generator ESP has been activated"
+            })
             coroutine.wrap(function()
                 while GeneratorESP do
                     UpdateGeneratorESP()
-                    wait(1) -- Update every 1 second
+                    wait(1)
                 end
             end)()
         else
-		-- Notification
-		Poltergeist:Notification({ 
-		Title = "Notification",
-		Icon = "notifications_active",
-		ImageSource = "Material",
-		Content = "Generator ESP has been deactivated"
-		})
+            sound(17208361335)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Generator ESP has been deactivated"
+            })
             CleanUpGeneratorESP()
         end
     end
@@ -81,7 +92,6 @@ function UpdateGeneratorESP()
                             highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
                             highlight.Parent = obj
                             
-                            -- Add distance label
                             local billboard = Instance.new("BillboardGui", obj)
                             billboard.Name = "GeneratorESP"
                             billboard.Size = UDim2.new(1, 200, 1, 30)
@@ -105,7 +115,6 @@ function UpdateGeneratorESP()
         end
     end
     
-    -- Update distances
     if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Head") then
         for _, obj in ipairs(workspace:GetDescendants()) do
             if obj:IsA("Model") and obj.Name == "Generator" and obj:FindFirstChild("GeneratorESP") then
@@ -148,27 +157,27 @@ local TwistedESPToggle = GeneralTab:CreateToggle({
     Callback = function(v)
         TwistedESP = v
         if TwistedESP then
-		-- Notification
-		Poltergeist:Notification({ 
-		Title = "Notification",
-		Icon = "notifications_active",
-		ImageSource = "Material",
-		Content = "Twisters ESP has been activated"
-		})
+            sound(8486683243)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Twisters ESP has been activated"
+            })
             coroutine.wrap(function()
                 while TwistedESP do
                     UpdateTwistedESP()
-                    wait(1) -- More frequent updates for enemies
+                    wait(1)
                 end
             end)()
         else
-		-- Notification
-		Poltergeist:Notification({ 
-		Title = "Notification",
-		Icon = "notifications_active",
-		ImageSource = "Material",
-		Content = "Twisters ESP has been deactivated"
-		})
+            sound(17208361335)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Twisters ESP has been deactivated"
+            })
             CleanUpTwistedESP()
         end
     end
@@ -179,7 +188,6 @@ function UpdateTwistedESP()
         if obj:IsA("Model") and obj.Parent.Name == "Monsters" then
             pcall(function()
                 if not obj:FindFirstChild("TwistedHighlight") then
-                    -- Create highlight
                     local highlight = Instance.new("Highlight")
                     highlight.Name = "TwistedHighlight"
                     highlight.FillColor = Color3.fromRGB(255, 0, 0)
@@ -187,7 +195,6 @@ function UpdateTwistedESP()
                     highlight.FillTransparency = 0.4
                     highlight.Parent = obj
                     
-                    -- Create ESP label
                     local billboard = Instance.new("BillboardGui", obj)
                     billboard.Name = "TwistedESP"
                     billboard.Size = UDim2.new(1, 200, 1, 30)
@@ -207,7 +214,6 @@ function UpdateTwistedESP()
         end
     end
     
-    -- Update distances
     if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Head") then
         for _, obj in ipairs(workspace:GetDescendants()) do
             if obj:IsA("Model") and obj:FindFirstChild("TwistedESP") then
@@ -254,28 +260,28 @@ local ItemEspToggle = GeneralTab:CreateToggle({
     Callback = function(v)
         ItemESP = v
         if ItemESP then
-			-- Notification
-		Poltergeist:Notification({ 
-		Title = "Notification",
-		Icon = "notifications_active",
-		ImageSource = "Material",
-		Content = "Item ESP has been activated"
-		})
+            sound(8486683243)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Item ESP has been activated"
+            })
             coroutine.wrap(function()
                 while ItemESP do
                     UpdateItemESP()
-                    wait(1) -- Balanced update rate
+                    wait(1)
                 end
             end)()
         else
             CleanUpItemESP()
-			-- Notification
-		Poltergeist:Notification({ 
-		Title = "Notification",
-		Icon = "notifications_active",
-		ImageSource = "Material",
-		Content = "Item ESP has been deactivated"
-		})
+            sound(17208361335)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Item ESP has been deactivated"
+            })
         end
     end
 })
@@ -284,26 +290,22 @@ function UpdateItemESP()
     local itemsFolder = FindItemsFolder()
     if not itemsFolder then return end
 
-    -- Clean up removed items
     for item, _ in pairs(itemCache) do
         if not item.Parent then
             itemCache[item] = nil
         end
     end
 
-    -- Find new items
     for _, obj in ipairs(itemsFolder:GetChildren()) do
         if obj:IsA("Model") and obj:FindFirstChild("Prompt") and not itemCache[obj] then
             pcall(function()
-                -- Create highlight
                 local highlight = Instance.new("Highlight")
                 highlight.Name = "ItemHighlight"
-                highlight.FillColor = Color3.fromRGB(255, 215, 0) -- Gold
+                highlight.FillColor = Color3.fromRGB(255, 215, 0)
                 highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
                 highlight.FillTransparency = 0.3
                 highlight.Parent = obj
                 
-                -- Create ESP label
                 local billboard = Instance.new("BillboardGui", obj)
                 billboard.Name = "ItemESP"
                 billboard.Size = UDim2.new(1, 200, 1, 30)
@@ -324,7 +326,6 @@ function UpdateItemESP()
         end
     end
     
-    -- Update distances
     if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Head") then
         for obj, _ in pairs(itemCache) do
             if obj.Parent and obj:FindFirstChild("ItemESP") then
@@ -352,119 +353,202 @@ function CleanUpItemESP()
     itemCache = {}
 end
 
--- Auto Skill Check Button
+NVPU = false
+local NoVeePopUps = GeneralTab:CreateButton({
+    Name = "🖥️ No Vee pop-ups",
+    Description = "Disable pop-ups of twisted Vee",
+    Callback = function()
+        if NVPU == false then
+            NVPU = true
+            if game.Players.LocalPlayer.PlayerGui:FindFirstChild("ScreenGui") then
+                if game.Players.LocalPlayer.PlayerGui.ScreenGui:FindFirstChild("PopUp") then
+                    game.Players.LocalPlayer.PlayerGui.ScreenGui.PopUp:Destroy()
+                end
+            end
+            sound(8486683243)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "No Vee pop-ups has been activated"
+            })
+        else
+            sound(17208361335)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "No Vee pop-ups is already activated"
+            })
+        end
+    end
+})
+
 GeneralTab:CreateSection("Others")
 
 local ASCValue = false
-
 local AutoSkillCheck = GeneralTab:CreateButton({
-	Name = "🤹‍♀️ Auto Skill Check",
-	Description = "Automatically completes skill checks (the skill check dont appear)",
-    	Callback = function()
-		if ASCValue == false then
-		ASCValue = true
-         game.ReplicatedStorage.Events.SkillcheckUpdate.OnClientInvoke = function() return "supercomplete" end
-		 -- Notification
-		Poltergeist:Notification({ 
-		Title = "Notification",
-		Icon = "notifications_active",
-		ImageSource = "Material",
-		Content = "Auto Skill Check has been activated"
-		})
-		else
-		 -- Notification
-		Poltergeist:Notification({ 
-		Title = "Notification",
-		Icon = "notifications_active",
-		ImageSource = "Material",
-		Content = "Auto Skill Check is aleardy activated"
-		})
-		end
-    	end
+    Name = "🤹‍♀️ Auto Skill Check",
+    Description = "Automatically completes skill checks (the skill check dont appear)",
+    Callback = function()
+        if ASCValue == false then
+            ASCValue = true
+            game.ReplicatedStorage.Events.SkillcheckUpdate.OnClientInvoke = function() return "supercomplete" end
+            sound(8486683243)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Auto Skill Check has been activated"
+            })
+        else
+            sound(17208361335)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Auto Skill Check is already activated"
+            })
+        end
+    end
 })
 
 local FBValue = false
-
 local FullBright = GeneralTab:CreateButton({
-	Name = "💡 Fullbright",
-	Description = "Remove game darkness",
-    	Callback = function()
-		if FBValue == false then
-		FBValue = true
-		local Lighting = game:GetService("Lighting")
+    Name = "💡 Fullbright",
+    Description = "Remove game darkness",
+    Callback = function()
+        if FBValue == false then
+            FBValue = true
+            local Lighting = game:GetService("Lighting")
+            Lighting.Brightness = 2
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 100000
+            Lighting.GlobalShadows = false
+            Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+            sound(8486683243)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Fullbright has been activated"
+            })
+        else
+            sound(17208361335)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Fullbright is already activated"
+            })
+        end
+    end
+})
+
+local function fbwbodetect()
+    if workspace.Info.BlackOut.Value == true then
+        local Lighting = game:GetService("Lighting")
         Lighting.Brightness = 2
-    	Lighting.ClockTime = 14
-    	Lighting.FogEnd = 100000
-    	Lighting.GlobalShadows = false
-    	Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
-		-- Notification
-		Poltergeist:Notification({ 
-		Title = "Notification",
-		Icon = "notifications_active",
-		ImageSource = "Material",
-		Content = "Fullbright has been activated"
-		})
-		else
-		-- Notification
-		Poltergeist:Notification({ 
-		Title = "Notification",
-		Icon = "notifications_active",
-		ImageSource = "Material",
-		Content = "Fullbright is aleardy activated"
-		})
-		end
-    	end
+        Lighting.ClockTime = 14
+        Lighting.FogEnd = 100000
+        Lighting.GlobalShadows = false
+        Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+    end
+end
+
+local FBwBO = false
+local FBwBOToggle = GeneralTab:CreateToggle({
+    Name = "🔦 Fullbright when blackout",
+    Description = "Automatically toggles fullbright when blackout detected",
+    CurrentValue = false,
+    Callback = function(v)
+        FBwBO = v
+        if FBwBO then
+            sound(8486683243)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Fullbright when blackout has been activated"
+            })
+            coroutine.wrap(function()
+                while FBwBO do
+                    fbwbodetect()
+                    wait(1)
+                end
+            end)()
+        else
+            sound(17208361335)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Fullbright when blackout has been deactivated"
+            })
+        end
+    end
 })
 
 local AutoGTE = false
 local AutoGTEToggle = GeneralTab:CreateToggle({
-    Name = "Auto GTE",
+    Name = "🏃 Auto GTE",
     Description = "Automatically teleports you to elevator when panic mode",
     CurrentValue = false,
     Callback = function(v)
         AutoGTE = v
         if AutoGTE then
-		-- Notification
-		Poltergeist:Notification({ 
-		Title = "Notification",
-		Icon = "notifications_active",
-		ImageSource = "Material",
-		Content = "Auto GTE has been activated"
-		})
+            sound(8486683243)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Auto GTE has been activated"
+            })
             coroutine.wrap(function()
-                while AutoGTE do
-                    UpdateAutoGTE()
-                    wait(1) -- Update every 1 second
+                local workspace = game:GetService("Workspace")
+                local players = game:GetService("Players")
+                local infoFolder = workspace:FindFirstChild("Info")
+                if infoFolder then
+                    local panicBool = infoFolder:FindFirstChild("Panic")
+                    if panicBool and panicBool:IsA("BoolValue") then
+                        while AutoGTE do
+                            if panicBool.Value == true then       
+                                local elevatorsFolder = workspace:FindFirstChild("Elevators")              
+                                if elevatorsFolder then 
+                                    local elevatorModel = elevatorsFolder:FindFirstChildWhichIsA("Model")
+                                    if elevatorModel then  
+                                        local monsterBlocker = elevatorModel:FindFirstChild("MonsterBlocker")    
+                                        if monsterBlocker and monsterBlocker:IsA("Part") then
+                                            local character = game.Players.LocalPlayer.Character
+                                            if character and character:FindFirstChild("HumanoidRootPart") then
+                                                character.HumanoidRootPart.CFrame = monsterBlocker.CFrame
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                            wait(0.5)
+                        end
+                    end
                 end
             end)()
         else
-		-- Notification
-		Poltergeist:Notification({ 
-		Title = "Notification",
-		Icon = "notifications_active",
-		ImageSource = "Material",
-		Content = "Auto GTE has been deactivated"
-		})
+            sound(17208361335)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Auto GTE has been deactivated"
+            })
         end
     end
 })
 
-function UpdateAutoGTE()
-if workspace.Info.Panic.Value == true then
-	local char = workspace.InGamePlayers:WaitForChild(game.Players.LocalPlayer.Name)
-	char.HumanoidRootPart.Position = game.workspace.Elevators.Elevator.Base.Position
-end
+GeneralTab:CreateSection("Player")
 
-
-
--- Add this section to your existing script (place it with the other ESP systems)
-GeneralTab:CreateSection("Movement")
-
--- Teleport Walk Variables (must be declared BEFORE the toggle/slider)
 local tpWalking = false
 local localPlayer = game:GetService("Players").LocalPlayer
 
--- Teleport Walk Functions (must be declared BEFORE the toggle/slider)
 local function StartTeleportWalk(speedMultiplier)
     tpWalking = true
     
@@ -485,7 +569,6 @@ local function StopTeleportWalk()
     tpWalking = false
 end
 
--- Now create the slider (needs to be before the toggle since toggle references it)
 local TpWalkSpeedSlider = GeneralTab:CreateSlider({
     Name = "Teleport Walk Speed",
     Description = "Adjust movement speed multiplier",
@@ -498,16 +581,15 @@ local TpWalkSpeedSlider = GeneralTab:CreateSlider({
             StartTeleportWalk(Value)
         end
     end
-}, "TeleportWalkSpeed")
+})
 
--- Finally create the toggle
 local TpWalkToggle = GeneralTab:CreateToggle({
     Name = "🚀 Teleport Walk",
     Description = "Enhanced movement speed",
     CurrentValue = false,
     Callback = function(Value)
         if Value then
-            -- Notification
+            sound(8486683243)
             Poltergeist:Notification({
                 Title = "Notification",
                 Icon = "notifications_active",
@@ -516,7 +598,7 @@ local TpWalkToggle = GeneralTab:CreateToggle({
             })
             StartTeleportWalk(TpWalkSpeedSlider.CurrentValue)
         else
-            -- Notification
+            sound(17208361335)
             Poltergeist:Notification({
                 Title = "Notification",
                 Icon = "notifications_active",
@@ -526,14 +608,154 @@ local TpWalkToggle = GeneralTab:CreateToggle({
             StopTeleportWalk()
         end
     end
-}, "TeleportWalkToggle")
+})
 
--- Handle character respawns
 localPlayer.CharacterAdded:Connect(function()
     if TpWalkToggle and TpWalkToggle.CurrentValue then
         StopTeleportWalk()
-        wait(0.5) -- Small delay to ensure character is fully loaded
+        wait(0.5)
         StartTeleportWalk(TpWalkSpeedSlider.CurrentValue)
     end
 end)
-end
+
+local Noclip = false
+local NoclipToggle = GeneralTab:CreateToggle({
+    Name = "👻 Noclip",
+    Description = "turns you into a POLTERGEIST bOooOooOoo",
+    CurrentValue = false,
+    Callback = function(v)
+        Noclip = v
+        if Noclip then
+            sound(8486683243)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Noclip has been activated"
+            })
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+            local function onTouched(part)
+                if part:IsA("BasePart") and part.CanCollide then
+                    if part:IsDescendantOf(character) then
+                        return
+                    end
+
+                    local playerPosition = humanoidRootPart.Position
+                    local partPosition = part.Position
+
+                    if partPosition.Y < playerPosition.Y - humanoidRootPart.Size.Y / 2 then
+                        return
+                    end
+                    if Noclip == true then
+                        local noclipBool = Instance.new("BoolValue")
+                        noclipBool.Name = "NoclipBool"
+                        noclipBool.Parent = part
+                        part.CanCollide = false
+                    end
+                end
+            end
+            humanoidRootPart.Touched:Connect(onTouched)
+        else
+            sound(17208361335)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Noclip has been deactivated"
+            })
+            for i, v in ipairs(workspace:GetDescendants()) do
+                if v.Name == "NoclipBool" then
+                    v.Parent.CanCollide = true
+                    Noclip = false
+                    v:Destroy()
+                end
+            end
+        end
+    end
+})
+
+local GodMode = false
+local GodModeToggle = GeneralTab:CreateToggle({
+    Name = "🌌 God Mode",
+    Description = "Makes you immune to twisteds",
+    CurrentValue = false,
+    Callback = function(v)
+        GodMode = v
+        if GodMode then
+            sound(8486683243)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "God Mode has been activated"
+            })
+            
+            local function LPGettingChased()
+                local currentRoom = game.Workspace:FindFirstChild("CurrentRoom")
+                if not currentRoom then 
+                    warn("CurrentRoom not found in Workspace")
+                    return false
+                end
+
+                for _, child in ipairs(currentRoom:GetChildren()) do
+                    if child:IsA("Model") then
+                        local monstersContainer = child:FindFirstChild("Monsters")
+                        if monstersContainer then
+                            for _, monster in ipairs(monstersContainer:GetChildren()) do
+                                local chasingValue = monster:FindFirstChild("ChasingValue")
+                                if chasingValue and chasingValue:IsA("ObjectValue") then
+                                    local player = game.Players.LocalPlayer
+                                    if chasingValue.Value == player or chasingValue.Value == player.Character then
+                                        return true
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+                return false
+            end
+
+            local function CHH(height)
+                local player = game.Players.LocalPlayer
+                local character = player.Character or player.CharacterAdded:Wait()
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    humanoid.HipHeight = height
+                end
+            end
+            
+            coroutine.wrap(function()
+                while GodMode do
+                    if LPGettingChased() then
+                        CHH(5.5)
+                    else
+                        CHH(1.25)
+                    end
+                    task.wait(0.1)
+                end
+            end)()
+        else
+            local function CHH(height)
+                local player = game.Players.LocalPlayer
+                local character = player.Character or player.CharacterAdded:Wait()
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    humanoid.HipHeight = height
+                end
+            end
+            CHH(1.25)
+            
+            sound(17208361335)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "God Mode has been deactivated"
+            })
+        end
+    end
+})

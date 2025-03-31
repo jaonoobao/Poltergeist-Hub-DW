@@ -669,9 +669,11 @@ local NoclipToggle = GeneralTab:CreateToggle({
             for i, v in ipairs(workspace:GetDescendants()) do
                 if v.Name == "NoclipBool" then
                 if v.Parent.Name == "DoorHitbox" then
+                print("a")
                  Noclip = false
                     v:Destroy()
                     else
+                        print("b")
                     v.Parent.CanCollide = true
             
                     Noclip = false

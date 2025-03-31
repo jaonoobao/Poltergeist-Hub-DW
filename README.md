@@ -733,7 +733,7 @@ local GodModeToggle = GeneralTab:CreateToggle({
                     if LPGettingChased() then
                         CHH(5.5)
                     else
-                        CHH(1.25)
+                        CHH(1.41)
                     end
                     task.wait(0.1)
                 end
@@ -747,7 +747,7 @@ local GodModeToggle = GeneralTab:CreateToggle({
                     humanoid.HipHeight = height
                 end
             end
-            CHH(1.25)
+            CHH(1.41)
             
             sound(17208361335)
             Poltergeist:Notification({ 

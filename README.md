@@ -353,6 +353,102 @@ function CleanUpItemESP()
     itemCache = {}
 end
 
+-- Player ESP System
+local PlayerEsp = false
+local PlayerEspToggle = GeneralTab:CreateToggle({
+    Name = "👤 Player ESP",
+    Description = "Highlights alive players",
+    CurrentValue = false,
+    Callback = function(v)
+        PlayerEsp = v
+        if PlayerEsp then
+            sound(8486683243)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Player ESP has been activated"
+            })
+            coroutine.wrap(function()
+                while PlayerEsp do
+                    UpdatePlayerEsp()
+                    wait(1)
+                end
+            end)()
+        else
+            sound(17208361335)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Player ESP has been deactivated"
+            })
+            CleanUpPlayerEsp()
+        end
+    end
+})
+
+function UpdatePlayerEsp()
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        if player ~= game.Players.LocalPlayer and player.Character then
+            local obj = player.Character
+            pcall(function()
+                if not obj:FindFirstChild("PlayerHighlight") then
+                    local highlight = Instance.new("Highlight")
+                    highlight.Name = "PlayerHighlight"
+                    highlight.FillColor = Color3.fromRGB(0, 0, 255)
+                    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+                    highlight.Parent = obj
+                    
+                    local billboard = Instance.new("BillboardGui", obj)
+                    billboard.Name = "PlayerEsp"
+                    billboard.Size = UDim2.new(1, 200, 1, 30)
+                    billboard.AlwaysOnTop = true
+                    billboard.Adornee = obj:FindFirstChild("HumanoidRootPart") or obj.PrimaryPart
+                    billboard.ExtentsOffset = Vector3.new(0, 2, 0)
+                    
+                    local label = Instance.new("TextLabel", billboard)
+                    label.Text = player.Name
+                    label.Size = UDim2.new(1, 0, 1, 0)
+                    label.Font = Enum.Font.SourceSansBold
+                    label.TextSize = 12
+                    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    label.BackgroundTransparency = 1
+                end
+            end)
+        end
+    end
+    
+    if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Head") then
+        for _, player in ipairs(game.Players:GetPlayers()) do
+            if player ~= game.Players.LocalPlayer and player.Character then
+                local obj = player.Character
+                if obj:FindFirstChild("PlayerEsp") then
+                    pcall(function()
+                        local root = obj:FindFirstChild("HumanoidRootPart") or obj.PrimaryPart
+                        if root then
+                            local dist = (game.Players.LocalPlayer.Character.Head.Position - root.Position).Magnitude
+                            obj.PlayerEsp.TextLabel.Text = string.format(player.Name.." [%.1fm]", dist)
+                        end
+                    end)
+                end
+            end
+        end
+    end
+end
+
+function CleanUpPlayerEsp()
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        if player.Character then
+            local obj = player.Character
+            local highlight = obj:FindFirstChild("PlayerHighlight")
+            if highlight then highlight:Destroy() end
+            local esp = obj:FindFirstChild("PlayerEsp")
+            if esp then esp:Destroy() end
+        end
+    end
+end
+
 NVPU = false
 local NoVeePopUps = GeneralTab:CreateButton({
     Name = "🖥️ No Vee pop-ups",
@@ -400,6 +496,13 @@ local AutoSkillCheck = GeneralTab:CreateButton({
                 Icon = "notifications_active",
                 ImageSource = "Material",
                 Content = "Auto Skill Check has been activated"
+            })
+            task.wait(0.2)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "The skill check will not appear!"
             })
         else
             sound(17208361335)
@@ -572,7 +675,7 @@ end
 local TpWalkSpeedSlider = GeneralTab:CreateSlider({
     Name = "Teleport Walk Speed",
     Description = "Adjust movement speed multiplier",
-    Range = {0.1, 1.5},
+    Range = {0.1, 5},
     Increment = 0.1,
     CurrentValue = 0.5,
     Callback = function(Value)
@@ -680,7 +783,7 @@ local NoclipToggle = GeneralTab:CreateToggle({
 local GodMode = false
 local GodModeToggle = GeneralTab:CreateToggle({
     Name = "🌌 God Mode",
-    Description = "Makes you immune to twisteds",
+    Description = "Makes you immune to twisteds (thx G0byD0llan for the inspiration to make this function)",
     CurrentValue = false,
     Callback = function(v)
         GodMode = v
@@ -755,6 +858,89 @@ local GodModeToggle = GeneralTab:CreateToggle({
                 Icon = "notifications_active",
                 ImageSource = "Material",
                 Content = "God Mode has been deactivated"
+            })
+        end
+    end
+})
+
+local JumpValue = false
+local JumpBTN = GeneralTab:CreateButton({
+    Name = "🦘 Jump button",
+    Description = "Creates a bypass jump button (not made by me, created by FoxcatLol on Discord.)",
+    Callback = function()
+        if JumpValue == false then
+            JumpValue = true
+            local UIS = game:GetService("UserInputService")
+            local Players = game:GetService("Players")
+
+            local player = Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = char:WaitForChild("HumanoidRootPart")
+            local humanoid = char:WaitForChild("Humanoid")
+
+            local button = Instance.new("TextButton")
+            button.Size = UDim2.new(0, 75, 0, 75)
+            button.Position = UDim2.new(0.5, -50, 0.8, 0)
+            button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+            button.Text = "Jump"
+            button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            button.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui"):FindFirstChildOfClass("ScreenGui") or Instance.new("ScreenGui", game.Players.LocalPlayer.PlayerGui)
+
+            local dragging, dragInput, dragStart, startPos
+
+            button.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    dragging = true
+                    dragStart = input.Position
+                    startPos = button.Position
+                    input.Changed:Connect(function()
+                        if input.UserInputState == Enum.UserInputState.End then
+                            dragging = false
+                        end
+                    end)
+                end
+            end)
+
+            button.InputChanged:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                    dragInput = input
+                end
+            end)
+
+            UIS.InputChanged:Connect(function(input)
+                if input == dragInput and dragging then
+                    local delta = input.Position - dragStart
+                    button.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+                end
+            end)
+
+            local function isOnGround()
+                return humanoid:GetState() == Enum.HumanoidStateType.Seated or 
+                       humanoid:GetState() == Enum.HumanoidStateType.Running or 
+                       humanoid:GetState() == Enum.HumanoidStateType.Landed
+            end
+
+            button.MouseButton1Click:Connect(function()
+                if isOnGround() then
+                    humanoidRootPart.AssemblyLinearVelocity = Vector3.new(0, 75, 0)
+                    task.wait(0.1)
+                end
+            end)
+            
+            sound(8486683243)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Jump button has been activated"
+            })
+        else
+            sound(17208361335)
+            Poltergeist:Notification({ 
+                Title = "Notification",
+                Icon = "notifications_active",
+                ImageSource = "Material",
+                Content = "Jump button is already activated"
             })
         end
     end
